@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.mapper.userMapper">
+    <select id="findAll" resultType="com.qf.entity.user">
+        select * from user
+    </select>
+    <insert id="insert" parameterType="com.qf.entity.user">
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into user (username,password,age) value (#{username},#{password},#{age})
+    </insert>
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from user where id =#{id}
+    </delete>
+    <select id="findAllByNameLike"  parameterType="java.lang.String" resultType="com.qf.entity.user">
+        select * from user where username like '%${value}%'
+    </select>
+</mapper>
