@@ -1,93 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <bean id="userDao" class="com.qf.dao.impl.UserDaoImpl"></bean>
-
     <bean id="userService" class="com.qf.service.impl.UserServiceImpl">
         <property name="userDao" ref="userDao"></property>
     </bean>
-
     <bean id="user" class="com.qf.pojo.User">
         <property name="id" value="1"></property>
-
         <property name="age" value="11"></property>
-
         <property name="password" value="123"></property>
-
         <property name="sex" value="男"></property>
-
         <property name="bornDate" value="2018/10/12"></property>
-
         <property name="hobbys">
-
             <array>
-
                 <value>嘿嘿嘿</value>
-
                 <value>cf</value>
-
             </array>
-
         </property>
-
         <property name="phones">
-
             <set>
-
                 <value>123</value>
-
                 <value>456</value>
-
             </set>
-
         </property>
-        <!--    private Integer id;
-    private String password;
-    private String sex;
-    private Integer age;
-     private Date bornDate;
-    private String[] hobbys;
-    private Set<String> phones;
-    private List<String> names;
-    private Map<String,String> countries;
-    private Properties files;-->
         <property name="names">
-
             <list>
-
                 <value>吴签</value>
-
                 <value>嫩爹</value>
-
             </list>
-
         </property>
-
         <property name="countries">
-
             <map>
-
                 <entry key="1" value="1433"></entry>
-
                 <entry key="2" value="223"></entry>
-
             </map>
-
         </property>
-
         <property name="files">
-
             <props>
-
                 <prop key="1">www1</prop>
-
                 <prop key="2">www1</prop>
-
             </props>
-
         </property>
     </bean>
     <bean id="username" class="com.qf.pojo.Student">
@@ -96,4 +54,20 @@
         <constructor-arg name="sex" value="男"></constructor-arg>
         <constructor-arg name="age" value="12"></constructor-arg>
     </bean>
+    <bean id="studentService" class="com.qf.service.impl.StudentServiceImpl"></bean>
+
+    <bean id="beforeAdvice" class="com.qf.aop.BeforeAdvice"></bean>
+    <bean id="afterAdvice" class="com.qf.aop.AfterAdvice"></bean>
+    <bean id="exceptionAdvice" class="com.qf.aop.Encircle"></bean>
+    <aop:config>
+        <aop:pointcut id="a1" expression="execution(* queryUsers())"></aop:pointcut>
+        <aop:pointcut id="a2" expression="execution(* update(..))"></aop:pointcut>
+        <aop:pointcut id="a3" expression="execution(* insert(..))"></aop:pointcut>
+        <aop:pointcut id="a4" expression="execution(* delete(..))"></aop:pointcut>
+
+        <aop:advisor advice-ref="afterAdvice" pointcut-ref="a1"></aop:advisor>
+        <aop:advisor advice-ref="beforeAdvice" pointcut-ref="a2"></aop:advisor>
+        <aop:advisor advice-ref="exceptionAdvice" pointcut-ref="a3"></aop:advisor>
+    </aop:config>
+
 </beans>
